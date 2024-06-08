@@ -3,10 +3,14 @@ from django.db import transaction
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from rest_framework.decorators import permission_classes
 from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import IsAuthenticated, AllowAny
+
 from user_account.models import Account
 
 
+@permission_classes([IsAuthenticated])
 @csrf_exempt
 @require_POST
 def deposit(request):
@@ -26,6 +30,7 @@ def deposit(request):
     return JsonResponse({'updated_balance': account.initial_balance}, status=201)
 
 
+@permission_classes([IsAuthenticated])
 @csrf_exempt
 @require_POST
 def withdraw(request):
@@ -50,6 +55,7 @@ def withdraw(request):
         return JsonResponse(response_data, status=200)
 
 
+@permission_classes([IsAuthenticated])
 @csrf_exempt
 @require_POST
 def transfer(request):
@@ -68,17 +74,19 @@ def transfer(request):
         except KeyError:
             return JsonResponse({'error': 'Bad request, from_account_id, to_account_id, and amount are required'},
                                 status=400)
-        from_account_id = get_object_or_404(Account, account_id=from_account_id)
-        to_account_id = get_object_or_404(Account, account_id=to_account_id)
-        if from_account_id.initial_balance >= amount:
-            from_account_id.initial_balance -= amount
-            from_account_id.save()
-            to_account_id.initial_balance += amount
-            to_account_id.save()
+        from_account_id_obj = Account.objects.get(account_id=from_account_id)
+        to_account_id_obj = Account.objects.get(account_id=to_account_id)
+
+        if from_account_id_obj.initial_balance >= amount:
+            from_account_id_obj.initial_balance -= amount
+            from_account_id_obj.save()
+            to_account_id_obj.initial_balance += amount
+            to_account_id_obj.save()
             response_data = {
-                'from_account_id_current_balance': from_account_id.initial_balance,
-                'to_account_id_balance': to_account_id.initial_balance,
+                'from_account_id_current_balance': from_account_id_obj.initial_balance,
+                'to_account_id_balance': to_account_id_obj.initial_balance,
             }
             return JsonResponse(response_data, status=200)
-        return JsonResponse({'not enough': f'not enough money in account current balance is {account.initial_balance}'},
-                            status=400)
+        return JsonResponse(
+            {'not enough': f'not enough money in account current balance is {from_account_id_obj.initial_balance}'},
+            status=400)

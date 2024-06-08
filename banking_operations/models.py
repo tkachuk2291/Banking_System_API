@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Deposit(models.Model):
-    account_id = models.ForeignKey('user_account.Account', on_delete=models.CASCADE, related_name='account_deposit')
+    account_id = models.AutoField(primary_key=True, db_column='account_id')
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0, null=False)
 
     def __str__(self):
@@ -10,7 +10,7 @@ class Deposit(models.Model):
 
 
 class Withdrawal(models.Model):
-    account_id = models.ForeignKey('user_account.Account', on_delete=models.CASCADE, related_name='account_withdrawal')
+    account_id = models.AutoField(primary_key=True, db_column='account_id')
     amount = models.FloatField(null=False)
 
     def __str__(self):
