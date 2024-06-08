@@ -1,11 +1,13 @@
 from django.urls import path
 
-from banking_operations.views import BankDeposit
+from banking_operations.views import deposit, withdraw, transfer
+
+# DepositEndpoint
 
 urlpatterns = [
-    path("deposit/", BankDeposit.as_view(), name="deposit"),
-    # path("withdraw/", BestSellers.as_view(), name="withdraw"),
-    # path("transfer/", BestSellers.as_view(), name="transfer"),
+    path("deposit/", deposit, name="deposit"),
+    path("withdraw/", withdraw, name="withdraw"),
+    path("transfer/", transfer, name="transfer"),
 
 ]
 app_name = "banking_operations"
