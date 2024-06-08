@@ -7,33 +7,6 @@ from rest_framework.generics import get_object_or_404
 from user_account.models import Account
 
 
-
-@csrf_exempt
-@require_POST
-def account(request):
-    try:
-        data = json.loads(request.body)
-        account_name = data['account_name']
-        initial_balance = data['initial_balance']
-        if not isinstance(account_name, str):
-            return JsonResponse({'error': 'Bad request, account_name must be a string'}, status=400)
-        if not isinstance(initial_balance, (int, float)):
-            return JsonResponse({'error': 'Bad request, initial_balance must be a number'}, status=400)
-    except KeyError:
-        return JsonResponse({'error': 'Bad request, account_name and initial_balance are required'}, status=400)
-    account = Account.objects.create(
-        name=account_name,
-        initial_balance=initial_balance
-    )
-
-    response_data = {
-        'account_id': f"{account.account_id}",
-        'account_name': f"{account_name}",
-        'initial_balance': f"{account.initial_balance}"
-    }
-    return JsonResponse({'account_info': response_data}, 201)
-
-
 @csrf_exempt
 @require_POST
 def deposit(request):

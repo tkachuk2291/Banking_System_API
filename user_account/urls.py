@@ -1,6 +1,6 @@
 from django.urls import path
 
-from banking_operations.views import account, user_profile
+from user_account.views import user_profile , account
 
 urlpatterns = [
     path("create_user_profile/", user_profile, name="registration"),

@@ -40,7 +40,7 @@ def user_profile(request):
 
 @csrf_exempt
 @require_POST
-def user_account(request):
+def account(request):
     try:
         data = json.loads(request.body)
         account_name = data['account_name']
@@ -62,3 +62,4 @@ def user_account(request):
         'initial_balance': f"{account.initial_balance}"
     }
     return JsonResponse({'account_info': response_data}, 201)
+
