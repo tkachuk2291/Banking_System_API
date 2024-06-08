@@ -6,10 +6,8 @@
 ### System and database configuration
 ```shell
 git clone https://github.com/tkachuk2291/Banking_System_API.git
-``` 
-```shell
-cd Banking_System_API  
 ```
+
 ```shell
 python3 -m venv venv  
 ``` 
@@ -31,12 +29,13 @@ touch .env
      ↓
  
 ```
-**Example Env file**
+**Example Env file ([Here you can generate a random key for Django Secret Key](https://djecrety.ir/))**
+
 ```
 USERS_SECRET_KEY=your_secret_key_here
 DEBUG=your choise format True|False
-
 ```
+
 **Run migration to create database**
 ```shell
 python manage.py migrate  
@@ -57,8 +56,8 @@ Quick start
 ```
 
 ```
-1. Create a user account first
-2. Go to endpoint /token with body |login and password|
+1. Create a user account first from endpoints create_user_profile/
+2. Go to endpoint token/ with body |login and password|
 2.1 Copy access-token and go to the billing account endpoint, specify data in body (examples are in Postman in documentation).
 3. Paste the |Bearer generated token| into the header and create a new billing account
 4. use the |Bearer generated token| in all endpoints.
