@@ -3,16 +3,16 @@ from django.db import transaction
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from rest_framework.decorators import permission_classes
+from rest_framework.decorators import permission_classes, api_view
 from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
 
 from user_account.models import Account
 
 
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 @csrf_exempt
-@require_POST
 def deposit(request):
     try:
         data = json.loads(request.body)
@@ -30,9 +30,9 @@ def deposit(request):
     return JsonResponse({'updated_balance': account.initial_balance}, status=201)
 
 
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 @csrf_exempt
-@require_POST
 def withdraw(request):
     try:
         data = json.loads(request.body)
@@ -55,9 +55,9 @@ def withdraw(request):
         return JsonResponse(response_data, status=200)
 
 
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 @csrf_exempt
-@require_POST
 def transfer(request):
     with transaction.atomic():
         try:
@@ -74,8 +74,14 @@ def transfer(request):
         except KeyError:
             return JsonResponse({'error': 'Bad request, from_account_id, to_account_id, and amount are required'},
                                 status=400)
-        from_account_id_obj = Account.objects.get(account_id=from_account_id)
-        to_account_id_obj = Account.objects.get(account_id=to_account_id)
+        try:
+            from_account_id_obj = Account.objects.get(account_id=from_account_id)
+        except Account.DoesNotExist:
+            return JsonResponse({'error': 'Source account not found'}, status=404)
+        try:
+            to_account_id_obj = Account.objects.get(account_id=to_account_id)
+        except Account.DoesNotExist:
+            return JsonResponse({'error': 'Destination account not found'}, status=404)
 
         if from_account_id_obj.initial_balance >= amount:
             from_account_id_obj.initial_balance -= amount

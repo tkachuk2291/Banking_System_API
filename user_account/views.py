@@ -3,16 +3,15 @@ import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from rest_framework.decorators import permission_classes
-from rest_framework.generics import get_object_or_404
+from rest_framework.decorators import permission_classes, api_view
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from user_account.models import Account, UserAccount
 
 
-@csrf_exempt
+@api_view(['POST'])
 @permission_classes([AllowAny])
-@require_POST
+@csrf_exempt
 def user_profile(request):
     try:
         data = json.loads(request.body)
@@ -29,7 +28,7 @@ def user_profile(request):
         if not isinstance(last_name, str):
             return JsonResponse({'error': 'Bad request, last_name must be a string'}, status=400)
     except KeyError:
-        return JsonResponse({'error': 'Bad request, account_name and initial_balance are required'}, status=400)
+        return JsonResponse({'error': 'Bad request,fields: username,first_name,last_name ,  initial_balance , password , repeat_password are required'}, status=400)
     if password == repeat_password:
         user_profile_bank = UserAccount.objects.create_user(
             username=username,
@@ -42,9 +41,9 @@ def user_profile(request):
     return JsonResponse({'error': 'Bad request, passwords must be match please check and try again'}, status=400)
 
 
-@csrf_exempt
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
-@require_POST
+@csrf_exempt
 def account(request):
     try:
         data = json.loads(request.body)
