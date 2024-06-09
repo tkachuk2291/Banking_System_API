@@ -8,7 +8,6 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 import logging
 from user_account.models import Account, UserAccount
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -36,7 +35,8 @@ def user_profile(request):
 
             return JsonResponse({"error": f"Bad request, {last_name} must be a string"}, status=400)
     except KeyError:
-        logger.error(f"error | Bad request,fields: username,first_name,last_name ,  initial_balance , password , repeat_password are required")
+        logger.error(
+            f"error | Bad request,fields: username,first_name,last_name ,  initial_balance , password , repeat_password are required")
 
         return JsonResponse(
             {
@@ -54,7 +54,8 @@ def user_profile(request):
                                                     f"first_name: {first_name} ,"
                                                     f"last_name : {last_name}"}, status=201)
         except IntegrityError:
-            logger.error(f"error |Error username '{username}' is already taken, please select another username and try again")
+            logger.error(
+                f"error |Error username '{username}' is already taken, please select another username and try again")
 
             return JsonResponse(
                 {
@@ -71,6 +72,7 @@ def user_profile(request):
 @permission_classes([IsAuthenticated])
 @csrf_exempt
 def account(request):
+    global user_account
     try:
         data = json.loads(request.body)
         account_name = data["account_name"]
@@ -97,16 +99,18 @@ def account(request):
         )
         return JsonResponse(
             {
-                "account created success": f"account_id: {user_account.id}| account_name: {user_account.name} | initial_balance: {user_account.initial_balance}"
+                "account created success": f"account_id: {user_account.account_id}| account_name: {user_account.name} | initial_balance: {user_account.initial_balance}"
             },
             status=201,
         )
+
     except IntegrityError:
         user_account = UserAccount.objects.get(id=user_id)
         user_account_name = user_account.related_user_account.name
         user_account_id = user_account.related_user_account.account_id
         user_initial_balance = user_account.related_user_account.initial_balance
-        logger.error(f"account already created | you have account_id: {user_account_id} | account_name: {user_account_name} | initial_balance: {user_initial_balance}")
+        logger.error(
+            f"account already created | you have account_id: {user_account_id} | account_name: {user_account_name} | initial_balance: {user_initial_balance}")
 
         return JsonResponse(
             {
