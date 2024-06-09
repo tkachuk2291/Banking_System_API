@@ -8,7 +8,7 @@ class UserAccount(AbstractUser):
 
 class Account(models.Model):
     account_id = models.AutoField(primary_key=True, db_column="account_id")
-    user = models.ForeignKey(UserAccount, models.CASCADE)
+    user = models.OneToOneField(UserAccount, models.CASCADE , related_name="related_user_account")
     name = models.CharField(max_length=256)
     initial_balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
