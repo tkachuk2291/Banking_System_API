@@ -9,8 +9,10 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+import logging.config
 import os
+
+from django.conf import settings
 from dotenv import load_dotenv
 from pathlib import Path
 from datetime import timedelta
@@ -123,7 +125,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = 'Europe/Kiev'
+
+USE_L10N = True
 
 USE_I18N = True
 
@@ -140,3 +144,19 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "user_account.UserAccount"
+
+LOGGING_CONFIG_BANKING_OPERATIONS = None
+LOGGING_USER_ACCOUNT_OPERATIONS = None
+
+if os.path.exists("banking_operations/user_account_logging.conf"):
+    LOGGING_CONFIG_BANKING_OPERATIONS = "banking_operations/user_account_logging.conf"
+
+if LOGGING_CONFIG_BANKING_OPERATIONS:
+    logging.config.fileConfig(LOGGING_CONFIG_BANKING_OPERATIONS)
+
+
+if os.path.exists("user_account/user_account_logging.conf"):
+    LOGGING_USER_ACCOUNT_OPERATIONS = "user_account/user_account_logging.conf"
+
+if LOGGING_USER_ACCOUNT_OPERATIONS:
+    logging.config.fileConfig(LOGGING_USER_ACCOUNT_OPERATIONS)
