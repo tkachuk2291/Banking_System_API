@@ -49,7 +49,15 @@ Documantation Postman
 ```
 Please familiarize yourself with the[ documentation for Banking System](https://app.getpostman.com/run-collection/34236566-6de45ffd-5fe9-4284-a458-9edb348e5585?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D34236566-6de45ffd-5fe9-4284-a458-9edb348e5585%26entityType%3Dcollection%26workspaceId%3D787d7e3e-0ca8-4cef-a1ea-1177714682e1
 ) in Postman.
-For convenience, all endpoints, test data, and practical hints are available there at a glance 
+For convenience, all endpoints, test data, and practical hints are available there at a glance
+
+**Please note that if you exceed the limit, the throttling system will limit you, to change it, specify your values in the settings** 
+```
+Current settings:
+'anon': '15/day',
+'user': '5/minute'
+```
+
 
 ```
 Quick start
