@@ -59,6 +59,15 @@ Current settings:
 ```
 **Logging system** 
 ```
+Attention! Execute the two commands below in the console or click the green button next to the commands,
+ without this the logs will not work.
+```
+```shell
+mkdir -p banking_operations/logs
+mkdir -p user_account/logs
+```
+
+```
 A logging system is implemented throughout the project.  
 Note that you can find logs in two places, namely in the banking system application.
 If the errors relate to banking operations and

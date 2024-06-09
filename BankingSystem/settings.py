@@ -148,8 +148,12 @@ AUTH_USER_MODEL = "user_account.UserAccount"
 LOGGING_CONFIG_BANKING_OPERATIONS = None
 LOGGING_USER_ACCOUNT_OPERATIONS = None
 
+
+
+
 if os.path.exists("banking_operations/user_account_logging.conf"):
     LOGGING_CONFIG_BANKING_OPERATIONS = "banking_operations/user_account_logging.conf"
+    os.makedirs("banking_operations/logs/banking_operations.log")
 
 if LOGGING_CONFIG_BANKING_OPERATIONS:
     logging.config.fileConfig(LOGGING_CONFIG_BANKING_OPERATIONS)
