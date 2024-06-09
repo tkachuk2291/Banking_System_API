@@ -57,7 +57,13 @@ Current settings:
 'anon': '15/day',
 'user': '5/minute'
 ```
-
+**Logging system** 
+```
+A logging system is implemented throughout the project.  
+Note that you can find logs in two places, namely in the banking system application.
+If the errors relate to banking operations and
+ the user_account application If the errors relate to user or account creation
+```
 
 ```
 Quick start
