@@ -36,6 +36,16 @@ USERS_SECRET_KEY=your_secret_key_here
 DEBUG=your choise format True|False
 ```
 
+**Logging system** 
+```
+Attention! Execute the two commands below in the console or click the green button next to the commands,
+ without this the logs and migrations will not work.
+```
+```shell
+mkdir -p banking_operations/logs
+mkdir -p user_account/logs
+```
+
 **Run migration to create database**
 ```shell
 python manage.py migrate  
@@ -56,15 +66,6 @@ For convenience, all endpoints, test data, and practical hints are available the
 Current settings:
 'anon': '15/day',
 'user': '5/minute'
-```
-**Logging system** 
-```
-Attention! Execute the two commands below in the console or click the green button next to the commands,
- without this the logs will not work.
-```
-```shell
-mkdir -p banking_operations/logs
-mkdir -p user_account/logs
 ```
 
 ```
