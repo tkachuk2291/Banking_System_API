@@ -18,9 +18,9 @@ def deposit(request):
         account_id = data["account_id"]
         amount = data["amount"]
         if not isinstance(account_id, int):
-            return JsonResponse({"error": "Bad request, account_id must be an integer"}, status=400)
+            return JsonResponse({"error": f"Bad request, {account_id} must be an integer"}, status=400)
         if not isinstance(amount, (int, float)):
-            return JsonResponse({"error": "Bad request, amount must be a number"}, status=400)
+            return JsonResponse({"error": f"Bad request, {amount} must be a number"}, status=400)
     except KeyError:
         return JsonResponse(
             {"error": "Bad request, account_id and amount are required"}, status=400
@@ -28,7 +28,7 @@ def deposit(request):
     account = get_object_or_404(Account, account_id=account_id)
     account.initial_balance += amount
     account.save()
-    return JsonResponse({"updated_balance": account.initial_balance}, status=201)
+    return JsonResponse({f"updated_balance to {account_id}":  f"current balance is {account.initial_balance}"}, status=201)
 
 
 @api_view(["POST"])
@@ -40,9 +40,9 @@ def withdraw(request):
         account_id = data["account_id"]
         amount = data["amount"]
         if not isinstance(account_id, int):
-            return JsonResponse({"error": "Bad request, account_id must be an integer"}, status=400)
+            return JsonResponse({"error": f"Bad request, {account_id} must be an integer"}, status=400)
         if not isinstance(amount, (int, float)):
-            return JsonResponse({"error": "Bad request, amount must be a number"}, status=400)
+            return JsonResponse({"error": f"Bad request, {amount} must be a number"}, status=400)
     except KeyError:
         return JsonResponse(
             {"error": "Bad request, account_id and amount are required"}, status=400
@@ -67,14 +67,14 @@ def transfer(request):
             amount = data["amount"]
             if not isinstance(from_account_id, int):
                 return JsonResponse(
-                    {"error": "Bad request, from_account_id must be an integer"}, status=400
+                    {"error": f"Bad request, {from_account_id} must be an integer"}, status=400
                 )
             if not isinstance(to_account_id, int):
                 return JsonResponse(
-                    {"error": "Bad request, to_account_id must be an integer"}, status=400
+                    {"error": f"Bad request, {to_account_id} must be an integer"}, status=400
                 )
             if not isinstance(amount, int):
-                return JsonResponse({"error": "Bad request, amount must be a number"}, status=400)
+                return JsonResponse({"error": f"Bad request, {amount} must be a number"}, status=400)
         except KeyError:
             return JsonResponse(
                 {"error": "Bad request, from_account_id, to_account_id, and amount are required"},
@@ -101,7 +101,7 @@ def transfer(request):
             return JsonResponse(response_data, status=200)
         return JsonResponse(
             {
-                "not enough": f"not enough money in account current balance is {from_account_id_obj.initial_balance}"
+                "not enough money": f"error not enough money in account {from_account_id_obj.initial_balance} to execute the transfer you need amount  <= {amount} "
             },
             status=400,
         )
